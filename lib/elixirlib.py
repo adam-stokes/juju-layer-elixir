@@ -33,11 +33,13 @@ def mix(cmd):
     hookenv.status_set(
         'maintenance',
         'Running Mix build tool')
+    if not os.path.exists(elixir_dist_dir()):
+        os.makedirs(elixir_dist_dir())
     os.chdir(elixir_dist_dir())
     if not isinstance(cmd, str):
         hookenv.status_set('blocked', '{}: should be a string'.format(cmd))
         sys.exit(0)
-    cmd = ("mix {}".format(cmd))
+    cmd = ("yes | mix {}".format(cmd))
     sh = shell(cmd)
     if sh.code > 0:
         hookenv.status_set("blocked", "Mix error: {}".format(sh.errors()))

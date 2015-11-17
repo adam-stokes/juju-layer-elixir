@@ -16,9 +16,6 @@ from charmhelpers.fetch import (
     apt_update
 )
 
-# ./lib/elixirlib.py
-from elixirlib import mix
-
 config = hookenv.config()
 
 
@@ -52,10 +49,6 @@ def install_elixir():
     apt_update()
     apt_purge(['elixir'])
     apt_install(['elixir'])
-    hookenv.status_set('maintenance', 'Installing Elixir completed.')
-
-    hookenv.log('Installing Hex package manager', 'info')
-    mix('local.hex')
 
     hookenv.status_set('active', 'Elixir is ready!')
     set_state('elixir.available')
