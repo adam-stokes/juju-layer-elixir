@@ -16,6 +16,9 @@ from charmhelpers.fetch import (
     apt_update
 )
 
+# ./lib/elixirlib.py
+from elixirlib import mix
+
 config = hookenv.config()
 
 
@@ -33,18 +36,26 @@ def install_elixir():
         os.remove('/etc/apt/sources.list.d/erlang-solutions.list')
 
     url = "https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb"
-    sh = shell('wget -q -O /tmp/elixir.deb {} && '
-               'sudo dpkg -i /tmp/elixir.deb'.format(url))
+    sh = shell('wget -q -O /tmp/elixir.deb {}'.format(url))
+    if sh.code > 0:
+        hookenv.status_set(
+            'blocked',
+            'Problem downloading Elixir: {}'.format(sh.errors()))
+        sys.exit(0)
+
+    sh = shell('dpkg -i /tmp/elixir.deb')
     if sh.code > 0:
         hookenv.status_set(
             'blocked',
             'Problem installing Elixir: {}'.format(sh.errors()))
         sys.exit(0)
-
     apt_update()
     apt_purge(['elixir'])
     apt_install(['elixir'])
     hookenv.status_set('maintenance', 'Installing Elixir completed.')
+
+    hookenv.log('Installing Hex package manager', 'info')
+    mix('local.hex')
 
     hookenv.status_set('active', 'Elixir is ready!')
     set_state('elixir.available')
