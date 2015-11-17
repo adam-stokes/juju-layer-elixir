@@ -1,0 +1,6 @@
+options:
+  app-path:
+    type: string
+    default: '/srv/app'
+    description: |
+      The default location of your Elixir application, defaults /srv/app
