@@ -13,7 +13,7 @@ Example,
 
 ```python
 
-from elixirlib import mix, elixir_dist_dir
+from charms.elixir import mix, elixir_dist_dir
 
 print(elixir_dist_dir())
 # /srv/app
@@ -29,7 +29,7 @@ def install_deps():
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Adam Stokes <adam.stokes@ubuntu.com>
+Copyright (c) 2015, 2016 Adam Stokes <adam.stokes@ubuntu.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
