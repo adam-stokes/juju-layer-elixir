@@ -1,3 +1,7 @@
 name: elixir
 summary: Elixir runtime
 description: Elixir runtime
+storage:
+  app:
+    type: filesystem
+    location: /srv/app

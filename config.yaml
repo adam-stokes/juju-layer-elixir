@@ -1,6 +1,4 @@
 options:
-  app-path:
-    type: string
-    default: '/srv/app'
-    description: |
-      The default location of your Elixir application, defaults /srv/app
+  install_sources:
+    default: |
+      - "https://packages.erlang-solutions.com/ubuntu contrib"

@@ -2,7 +2,9 @@ import os
 import sys
 from shell import shell
 
-from charmhelpers.core import hookenv
+from charmhelpers.core.hookenv import status_set
+from charmhelpers.core.hookenv import storage_get
+from charmhelpers.core.hookenv import storage_list
 
 
 def elixir_dist_dir():
@@ -11,8 +13,8 @@ def elixir_dist_dir():
     Returns:
     Absolute string of elixir application directory
     """
-    config = hookenv.config()
-    return os.path.join(config['app-path'])
+    storage_id = storage_list('app')[0]
+    return storage_get('location', storage_id)
 
 
 def mix(cmd):
@@ -30,17 +32,17 @@ def mix(cmd):
     Returns:
     Will halt on error
     """
-    hookenv.status_set(
+    status_set(
         'maintenance',
         'Running Mix build tool')
     if not os.path.exists(elixir_dist_dir()):
         os.makedirs(elixir_dist_dir())
     os.chdir(elixir_dist_dir())
     if not isinstance(cmd, str):
-        hookenv.status_set('blocked', '{}: should be a string'.format(cmd))
+        status_set('blocked', '{}: should be a string'.format(cmd))
         sys.exit(0)
     cmd = ("yes | mix {}".format(cmd))
     sh = shell(cmd)
     if sh.code > 0:
-        hookenv.status_set("blocked", "Mix error: {}".format(sh.errors()))
+        status_set("blocked", "Mix error: {}".format(sh.errors()))
         sys.exit(0)
